@@ -73,7 +73,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="rateLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="exchangeRate" min="-2" pref="184" max="-2" attributes="0"/>
+                      <Component id="exchangeRate" min="-2" pref="127" max="-2" attributes="0"/>
                   </Group>
                   <Component id="convertedAmountNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="amountNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -89,7 +89,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
+              <EmptySpace pref="146" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -134,6 +134,9 @@
         </Property>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fromCurrencyListActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="ConverterWindow_fromCurrencyList"/>
       </AuxValues>
@@ -150,6 +153,9 @@
           <Connection code="new javax.swing.DefaultComboBoxModel(currencies)" type="code"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toCurrencyListActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="exchangeRate">
       <Properties>

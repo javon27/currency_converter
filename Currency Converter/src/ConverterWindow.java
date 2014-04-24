@@ -11,13 +11,17 @@
 public class ConverterWindow extends javax.swing.JFrame {
 
     private String currencies[];
+    private String countries[];
     
     
     /**
      * Creates new form ConverterWindow
      */
     public ConverterWindow() {
-        currencies = new String[] {"USD","JPY","PES"};
+        JsonReader jsonReader = new JsonReader("currencylist.json");
+        currencies = jsonReader.getUnits();
+        countries = jsonReader.getCountries();
+        //currencies = new String[] {"JPY","USD","PES"};
         initComponents();
         
     }
@@ -59,11 +63,21 @@ public class ConverterWindow extends javax.swing.JFrame {
 
         fromCurrencyList.setModel(new javax.swing.DefaultComboBoxModel(currencies));
         fromCurrencyList.setToolTipText("");
+        fromCurrencyList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fromCurrencyListActionPerformed(evt);
+            }
+        });
 
         convertedAmount.setEditable(false);
         convertedAmount.setEnabled(false);
 
         toCurrencyList.setModel(new javax.swing.DefaultComboBoxModel(currencies));
+        toCurrencyList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toCurrencyListActionPerformed(evt);
+            }
+        });
 
         exchangeRate.setEditable(false);
         exchangeRate.setEnabled(false);
@@ -111,7 +125,7 @@ public class ConverterWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(rateLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(exchangeRate, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(exchangeRate, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(convertedAmountNameLabel)
                     .addComponent(amountNameLabel)
                     .addGroup(layout.createSequentialGroup()
@@ -122,7 +136,7 @@ public class ConverterWindow extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(fromCurrencyList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(toCurrencyList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(102, 102, 102))
+                .addContainerGap(146, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -155,9 +169,19 @@ public class ConverterWindow extends javax.swing.JFrame {
         updateLabels();
     }//GEN-LAST:event_formWindowOpened
 
+    private void fromCurrencyListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromCurrencyListActionPerformed
+        // TODO add your handling code here:
+        updateLabels();
+    }//GEN-LAST:event_fromCurrencyListActionPerformed
+
+    private void toCurrencyListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toCurrencyListActionPerformed
+        // TODO add your handling code here:
+        updateLabels();
+    }//GEN-LAST:event_toCurrencyListActionPerformed
+
     private void updateLabels() {
-        amountNameLabel.setText(currencies[fromCurrencyList.getSelectedIndex()]);
-        convertedAmountNameLabel.setText(currencies[toCurrencyList.getSelectedIndex()]);
+        amountNameLabel.setText(countries[fromCurrencyList.getSelectedIndex()]);
+        convertedAmountNameLabel.setText(countries[toCurrencyList.getSelectedIndex()]);
         
         exchangeRate.setText(null);
     }
