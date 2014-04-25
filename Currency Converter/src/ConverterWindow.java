@@ -1,3 +1,11 @@
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+import javax.swing.JFormattedTextField;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,6 +20,7 @@ public class ConverterWindow extends javax.swing.JFrame {
 
     private String currencies[];
     private String countries[];
+    private Double fromAmount;
     
     
     /**
@@ -21,9 +30,11 @@ public class ConverterWindow extends javax.swing.JFrame {
         JsonReader jsonReader = new JsonReader("currencylist.json");
         currencies = jsonReader.getUnits();
         countries = jsonReader.getCountries();
+        
         //currencies = new String[] {"JPY","USD","PES"};
         initComponents();
         
+        //setFromNumberFormat("USD");
     }
 
     /**
@@ -35,15 +46,17 @@ public class ConverterWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        amount = new javax.swing.JTextField();
         fromCurrencyList = new javax.swing.JComboBox();
-        convertedAmount = new javax.swing.JTextField();
         toCurrencyList = new javax.swing.JComboBox();
         exchangeRate = new javax.swing.JTextField();
         rateLabel = new javax.swing.JLabel();
         amountNameLabel = new javax.swing.JLabel();
         convertedAmountNameLabel = new javax.swing.JLabel();
         enterAmountLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        amount = new javax.swing.JFormattedTextField();
+        convertedAmount = new javax.swing.JFormattedTextField();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         updateMenuItem = new javax.swing.JMenuItem();
@@ -53,13 +66,13 @@ public class ConverterWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Currency Converter");
+        setName("Currency Converter"); // NOI18N
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
-
-        amount.setToolTipText("Enter Amount");
 
         fromCurrencyList.setModel(new javax.swing.DefaultComboBoxModel(currencies));
         fromCurrencyList.setToolTipText("");
@@ -69,9 +82,6 @@ public class ConverterWindow extends javax.swing.JFrame {
             }
         });
 
-        convertedAmount.setEditable(false);
-        convertedAmount.setEnabled(false);
-
         toCurrencyList.setModel(new javax.swing.DefaultComboBoxModel(currencies));
         toCurrencyList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -80,17 +90,28 @@ public class ConverterWindow extends javax.swing.JFrame {
         });
 
         exchangeRate.setEditable(false);
-        exchangeRate.setEnabled(false);
+        exchangeRate.setFocusTraversalKeysEnabled(false);
+        exchangeRate.setFocusable(false);
 
         rateLabel.setText("Exchange Rate:");
 
-        amountNameLabel.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        amountNameLabel.setFont(new java.awt.Font("Lucida Grande", 1, 12)); // NOI18N
         amountNameLabel.setText("jLabel1");
 
-        convertedAmountNameLabel.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        convertedAmountNameLabel.setFont(new java.awt.Font("Lucida Grande", 1, 12)); // NOI18N
         convertedAmountNameLabel.setText("jLabel2");
 
+        enterAmountLabel.setLabelFor(amount);
         enterAmountLabel.setText("Enter Amount:");
+
+        jLabel1.setLabelFor(convertedAmount);
+        jLabel1.setText("Converted Amount:");
+
+        jLabel2.setFont(new java.awt.Font("Courier", 0, 24)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Currency Converter");
+
+        amount.setToolTipText("Enter Amount");
 
         fileMenu.setText("File");
 
@@ -118,47 +139,56 @@ public class ConverterWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(enterAmountLabel)
+                .addGap(38, 38, 38)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(enterAmountLabel)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(rateLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(exchangeRate, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(convertedAmountNameLabel)
                     .addComponent(amountNameLabel)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(convertedAmount)
-                            .addComponent(amount, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(amount, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                            .addComponent(convertedAmount))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(fromCurrencyList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(toCurrencyList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addContainerGap(93, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(115, 115, 115))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addComponent(amountNameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(amount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fromCurrencyList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(enterAmountLabel))
+                    .addComponent(enterAmountLabel)
+                    .addComponent(amount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(8, 8, 8)
                 .addComponent(convertedAmountNameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(convertedAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(toCurrencyList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(toCurrencyList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(convertedAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(exchangeRate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rateLabel))
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addGap(66, 66, 66))
         );
 
         pack();
@@ -167,16 +197,25 @@ public class ConverterWindow extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         updateLabels();
+        amount.setValue(1.05);
+        NumberFormat numFormat = NumberFormat.getNumberInstance();
+        numFormat.setMinimumFractionDigits(2);
+        NumberFormatter numFormatter = new NumberFormatter(numFormat);
+        DefaultFormatterFactory numFactory = new DefaultFormatterFactory(numFormatter);
+        amount.setFormatterFactory(numFactory);
+        convertedAmount.setFormatterFactory(numFactory);
     }//GEN-LAST:event_formWindowOpened
 
     private void fromCurrencyListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromCurrencyListActionPerformed
         // TODO add your handling code here:
         updateLabels();
+        //setFromNumberFormat(currencies[fromCurrencyList.getSelectedIndex()]);
     }//GEN-LAST:event_fromCurrencyListActionPerformed
 
     private void toCurrencyListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toCurrencyListActionPerformed
         // TODO add your handling code here:
         updateLabels();
+        //setToNumberFormat(currencies[toCurrencyList.getSelectedIndex()]);
     }//GEN-LAST:event_toCurrencyListActionPerformed
 
     private void updateLabels() {
@@ -185,6 +224,24 @@ public class ConverterWindow extends javax.swing.JFrame {
         
         exchangeRate.setText(null);
     }
+    
+//    public void setFromNumberFormat(String unit) {
+//        Locale locale = new Locale(unit);
+//        NumberFormat numFormat = NumberFormat.getNumberInstance();
+//        numFormat.setMinimumFractionDigits(2);
+//        NumberFormatter numFormatter = new NumberFormatter(numFormat);
+//        DefaultFormatterFactory numFactory = new DefaultFormatterFactory(numFormatter);
+//        amount.setFormatterFactory(numFactory);
+//    }
+//    
+//    public void setToNumberFormat(String unit) {
+//        Locale locale = new Locale(unit);
+//        Locale.setDefault(locale);
+//        NumberFormat numFormat = NumberFormat.getCurrencyInstance(locale);
+//        NumberFormatter numFormatter = new NumberFormatter(numFormat);
+//        numFactory = new DefaultFormatterFactory(numFormatter);
+//        convertedAmount.setFormatterFactory(numFactory);
+//    }
     
     /**
      * @param args the command line arguments
@@ -224,15 +281,17 @@ public class ConverterWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu aboutMenu;
     private javax.swing.JMenuItem aboutMenuItem;
-    private javax.swing.JTextField amount;
+    private javax.swing.JFormattedTextField amount;
     private javax.swing.JLabel amountNameLabel;
-    private javax.swing.JTextField convertedAmount;
+    private javax.swing.JFormattedTextField convertedAmount;
     private javax.swing.JLabel convertedAmountNameLabel;
     private javax.swing.JLabel enterAmountLabel;
     private javax.swing.JTextField exchangeRate;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JComboBox fromCurrencyList;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JLabel rateLabel;
     private javax.swing.JComboBox toCurrencyList;
