@@ -1,6 +1,8 @@
 
+import static java.lang.System.exit;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import static java.util.Arrays.asList;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingUtilities;
@@ -37,7 +39,18 @@ public class ConverterWindow extends javax.swing.JFrame {
         //currencies = new String[] {"JPY","USD","PES"};
         initComponents();
         
+        updateLabels();
+        amountField.setValue(1.00);
+        NumberFormat numFormat = NumberFormat.getNumberInstance();
+        numFormat.setMinimumFractionDigits(2);
+        NumberFormatter numFormatter = new NumberFormatter(numFormat);
+        DefaultFormatterFactory numFactory = new DefaultFormatterFactory(numFormatter);
+        amountField.setFormatterFactory(numFactory);
+        convertedAmountField.setFormatterFactory(numFactory);
         //setFromNumberFormat("USD");
+        
+        fromCurrencyList.setSelectedIndex(asList(currencies).indexOf("USD"));
+        toCurrencyList.setSelectedIndex(asList(currencies).indexOf("JPY"));
     }
 
     /**
@@ -49,6 +62,11 @@ public class ConverterWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        AboutDialog = new javax.swing.JDialog();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         fromCurrencyList = new javax.swing.JComboBox();
         toCurrencyList = new javax.swing.JComboBox();
         exchangeRateField = new javax.swing.JTextField();
@@ -60,6 +78,7 @@ public class ConverterWindow extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         amountField = new javax.swing.JFormattedTextField();
         convertedAmountField = new javax.swing.JFormattedTextField();
+        jSeparator1 = new javax.swing.JSeparator();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         updateMenuItem = new javax.swing.JMenuItem();
@@ -67,18 +86,50 @@ public class ConverterWindow extends javax.swing.JFrame {
         aboutMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
 
+        AboutDialog.setTitle("About");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Yada yada yada yada...");
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jLabel3.setFont(new java.awt.Font("Lucida Blackletter", 0, 18)); // NOI18N
+        jLabel3.setText("About:");
+
+        jLabel4.setText("Copyright 2014 Jayson Gallardo");
+
+        javax.swing.GroupLayout AboutDialogLayout = new javax.swing.GroupLayout(AboutDialog.getContentPane());
+        AboutDialog.getContentPane().setLayout(AboutDialogLayout);
+        AboutDialogLayout.setHorizontalGroup(
+            AboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AboutDialogLayout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addGroup(AboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
+                    .addGroup(AboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)))
+                .addContainerGap(60, Short.MAX_VALUE))
+        );
+        AboutDialogLayout.setVerticalGroup(
+            AboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AboutDialogLayout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(39, 39, 39))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Currency Converter");
         setName("Currency Converter"); // NOI18N
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
-        });
 
         fromCurrencyList.setModel(new javax.swing.DefaultComboBoxModel(currencies));
-        fromCurrencyList.setToolTipText("");
+        fromCurrencyList.setToolTipText("Currency Type");
         fromCurrencyList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fromCurrencyListActionPerformed(evt);
@@ -86,6 +137,7 @@ public class ConverterWindow extends javax.swing.JFrame {
         });
 
         toCurrencyList.setModel(new javax.swing.DefaultComboBoxModel(currencies));
+        toCurrencyList.setToolTipText("Currency Type");
         toCurrencyList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 toCurrencyListActionPerformed(evt);
@@ -131,7 +183,13 @@ public class ConverterWindow extends javax.swing.JFrame {
         updateMenuItem.setToolTipText("");
         fileMenu.add(updateMenuItem);
 
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setText("Exit");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
@@ -140,6 +198,11 @@ public class ConverterWindow extends javax.swing.JFrame {
 
         aboutMenuItem.setText("About...");
         aboutMenuItem.setToolTipText("");
+        aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutMenuItemActionPerformed(evt);
+            }
+        });
         aboutMenu.add(aboutMenuItem);
 
         menuBar.add(aboutMenu);
@@ -171,18 +234,22 @@ public class ConverterWindow extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(fromCurrencyList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(toCurrencyList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(93, 93, 93))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addGap(121, 121, 121))
+                .addContainerGap(93, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
+                .addGap(20, 20, 20)
                 .addComponent(jLabel2)
-                .addGap(39, 39, 39)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(amountNameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -206,18 +273,6 @@ public class ConverterWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
-        updateLabels();
-        amountField.setValue(1.00);
-        NumberFormat numFormat = NumberFormat.getNumberInstance();
-        numFormat.setMinimumFractionDigits(2);
-        NumberFormatter numFormatter = new NumberFormatter(numFormat);
-        DefaultFormatterFactory numFactory = new DefaultFormatterFactory(numFormatter);
-        amountField.setFormatterFactory(numFactory);
-        convertedAmountField.setFormatterFactory(numFactory);
-    }//GEN-LAST:event_formWindowOpened
-
     private void fromCurrencyListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromCurrencyListActionPerformed
         // TODO add your handling code here:
         updateLabels();
@@ -240,6 +295,16 @@ public class ConverterWindow extends javax.swing.JFrame {
             }
         });
     }//GEN-LAST:event_amountFieldFocusGained
+
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+        // TODO add your handling code here:
+        exit(0);
+    }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void updateLabels() {
         amountNameLabel.setText(countries[fromCurrencyList.getSelectedIndex()]);
@@ -302,6 +367,7 @@ public class ConverterWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog AboutDialog;
     private javax.swing.JMenu aboutMenu;
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JFormattedTextField amountField;
@@ -315,6 +381,11 @@ public class ConverterWindow extends javax.swing.JFrame {
     private javax.swing.JComboBox fromCurrencyList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JLabel rateLabel;
     private javax.swing.JComboBox toCurrencyList;
