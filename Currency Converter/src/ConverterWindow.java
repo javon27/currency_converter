@@ -33,7 +33,7 @@ public class ConverterWindow extends javax.swing.JFrame {
         JsonReader jsonReader = new JsonReader("currencylist.json");
         currencies = jsonReader.getUnits();
         countries = jsonReader.getCountries();
-        exchangeRate = 1.0;
+        exchangeRate = 1.007;
         //currencies = new String[] {"JPY","USD","PES"};
         initComponents();
         
@@ -120,6 +120,10 @@ public class ConverterWindow extends javax.swing.JFrame {
                 amountFieldFocusGained(evt);
             }
         });
+
+        convertedAmountField.setEditable(false);
+        convertedAmountField.setFocusTraversalKeysEnabled(false);
+        convertedAmountField.setFocusable(false);
 
         fileMenu.setText("File");
 
@@ -232,7 +236,7 @@ public class ConverterWindow extends javax.swing.JFrame {
 
             @Override
             public void run() {
-                    amountField.selectAll();		
+                amountField.selectAll();		
             }
         });
     }//GEN-LAST:event_amountFieldFocusGained
