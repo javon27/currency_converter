@@ -11,4 +11,9 @@
 public class Currency {
     public String unit;
     public String country;
+    public Currency(String unit, String country) {
+        this.unit = unit;
+        this.country = country;
+        System.out.println(unit + " " + country);
+    }
 }
