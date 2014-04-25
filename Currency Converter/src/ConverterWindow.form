@@ -78,14 +78,14 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="rateLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="exchangeRate" min="-2" pref="127" max="-2" attributes="0"/>
+                      <Component id="exchangeRateField" min="-2" pref="127" max="-2" attributes="0"/>
                   </Group>
                   <Component id="convertedAmountNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="amountNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="amount" pref="183" max="32767" attributes="0"/>
-                          <Component id="convertedAmount" max="32767" attributes="0"/>
+                          <Component id="amountField" pref="183" max="32767" attributes="0"/>
+                          <Component id="convertedAmountField" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -94,27 +94,27 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace pref="93" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="115" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+              <EmptySpace pref="46" max="32767" attributes="0"/>
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="43" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
               <Component id="amountNameLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="fromCurrencyList" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="enterAmountLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="amount" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="amountField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
               <Component id="convertedAmountNameLabel" min="-2" max="-2" attributes="0"/>
@@ -122,11 +122,11 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="toCurrencyList" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="convertedAmount" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="convertedAmountField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="exchangeRate" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="exchangeRateField" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="rateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
@@ -159,7 +159,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toCurrencyListActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="exchangeRate">
+    <Component class="javax.swing.JTextField" name="exchangeRateField">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
         <Property name="focusTraversalKeysEnabled" type="boolean" value="false"/>
@@ -190,7 +190,7 @@
     <Component class="javax.swing.JLabel" name="enterAmountLabel">
       <Properties>
         <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="amount"/>
+          <ComponentRef name="amountField"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Enter Amount:"/>
       </Properties>
@@ -198,7 +198,7 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="convertedAmount"/>
+          <ComponentRef name="convertedAmountField"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Converted Amount:"/>
       </Properties>
@@ -212,12 +212,15 @@
         <Property name="text" type="java.lang.String" value="Currency Converter"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="amount">
+    <Component class="javax.swing.JFormattedTextField" name="amountField">
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Enter Amount"/>
       </Properties>
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="amountFieldFocusGained"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JFormattedTextField" name="convertedAmount">
+    <Component class="javax.swing.JFormattedTextField" name="convertedAmountField">
     </Component>
   </SubComponents>
 </Form>
