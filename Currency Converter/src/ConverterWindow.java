@@ -324,6 +324,7 @@ public class ConverterWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void updateMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateMenuItemActionPerformed
+        exchangeRates.update(fromUnit);
         updateForm();
     }//GEN-LAST:event_updateMenuItemActionPerformed
 
