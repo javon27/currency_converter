@@ -20,9 +20,10 @@ import javax.swing.text.NumberFormatter;
  * @author admin3
  */
 public class ConverterWindow extends javax.swing.JFrame {
-
-    private String currencies[];
-    private String countries[];
+    static String DEF_FROM_CURRENCY = "USD";
+    static String DEF_TO_CURRENCY = "JPY";
+    private String[] currenciesList;
+    private String[] countriesList;
     private Double amount;
     private Double toAmount;
     private Double exchangeRate;
@@ -33,24 +34,32 @@ public class ConverterWindow extends javax.swing.JFrame {
      */
     public ConverterWindow() {
         JsonReader jsonReader = new JsonReader("currencylist.json");
-        currencies = jsonReader.getUnits();
-        countries = jsonReader.getCountries();
-        exchangeRate = 1.007;
-        //currencies = new String[] {"JPY","USD","PES"};
+        ExchangeRates exchangeRates = new ExchangeRates();
+        
+        currenciesList = jsonReader.getUnits();
+        countriesList = jsonReader.getCountries();
+        
+        exchangeRates.update(DEF_FROM_CURRENCY);
+        exchangeRate = exchangeRates.getRate(DEF_TO_CURRENCY);
         initComponents();
         
         updateLabels();
+        
         amountField.setValue(1.00);
+        
+        // Format the input field to numerical with 2 decimal places
         NumberFormat numFormat = NumberFormat.getNumberInstance();
         numFormat.setMinimumFractionDigits(2);
         NumberFormatter numFormatter = new NumberFormatter(numFormat);
-        DefaultFormatterFactory numFactory = new DefaultFormatterFactory(numFormatter);
+        DefaultFormatterFactory numFactory = 
+                new DefaultFormatterFactory(numFormatter);
         amountField.setFormatterFactory(numFactory);
         convertedAmountField.setFormatterFactory(numFactory);
-        //setFromNumberFormat("USD");
         
-        fromCurrencyList.setSelectedIndex(asList(currencies).indexOf("USD"));
-        toCurrencyList.setSelectedIndex(asList(currencies).indexOf("JPY"));
+        fromCurrencyList.setSelectedIndex(asList(currenciesList)
+                .indexOf(DEF_FROM_CURRENCY));
+        toCurrencyList.setSelectedIndex(asList(currenciesList)
+                .indexOf(DEF_TO_CURRENCY));
     }
 
     /**
@@ -128,7 +137,7 @@ public class ConverterWindow extends javax.swing.JFrame {
         setName("Currency Converter"); // NOI18N
         setResizable(false);
 
-        fromCurrencyList.setModel(new javax.swing.DefaultComboBoxModel(currencies));
+        fromCurrencyList.setModel(new javax.swing.DefaultComboBoxModel(currenciesList));
         fromCurrencyList.setToolTipText("Currency Type");
         fromCurrencyList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,7 +145,7 @@ public class ConverterWindow extends javax.swing.JFrame {
             }
         });
 
-        toCurrencyList.setModel(new javax.swing.DefaultComboBoxModel(currencies));
+        toCurrencyList.setModel(new javax.swing.DefaultComboBoxModel(currenciesList));
         toCurrencyList.setToolTipText("Currency Type");
         toCurrencyList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -307,29 +316,13 @@ public class ConverterWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void updateLabels() {
-        amountNameLabel.setText(countries[fromCurrencyList.getSelectedIndex()]);
-        convertedAmountNameLabel.setText(countries[toCurrencyList.getSelectedIndex()]);
+        amountNameLabel.setText(countriesList[fromCurrencyList
+                .getSelectedIndex()]);
+        convertedAmountNameLabel.setText(countriesList[toCurrencyList
+                .getSelectedIndex()]);
         
         exchangeRateField.setText(exchangeRate.toString());
     }
-    
-//    public void setFromNumberFormat(String unit) {
-//        Locale locale = new Locale(unit);
-//        NumberFormat numFormat = NumberFormat.getNumberInstance();
-//        numFormat.setMinimumFractionDigits(2);
-//        NumberFormatter numFormatter = new NumberFormatter(numFormat);
-//        DefaultFormatterFactory numFactory = new DefaultFormatterFactory(numFormatter);
-//        amount.setFormatterFactory(numFactory);
-//    }
-//    
-//    public void setToNumberFormat(String unit) {
-//        Locale locale = new Locale(unit);
-//        Locale.setDefault(locale);
-//        NumberFormat numFormat = NumberFormat.getCurrencyInstance(locale);
-//        NumberFormatter numFormatter = new NumberFormatter(numFormat);
-//        numFactory = new DefaultFormatterFactory(numFormatter);
-//        convertedAmount.setFormatterFactory(numFactory);
-//    }
     
     /**
      * @param args the command line arguments

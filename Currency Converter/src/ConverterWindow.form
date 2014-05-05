@@ -216,7 +216,7 @@
     <Component class="javax.swing.JComboBox" name="fromCurrencyList">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new javax.swing.DefaultComboBoxModel(currencies)" type="code"/>
+          <Connection code="new javax.swing.DefaultComboBoxModel(currenciesList)" type="code"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Currency Type"/>
       </Properties>
@@ -230,7 +230,7 @@
     <Component class="javax.swing.JComboBox" name="toCurrencyList">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new javax.swing.DefaultComboBoxModel(currencies)" type="code"/>
+          <Connection code="new javax.swing.DefaultComboBoxModel(currenciesList)" type="code"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Currency Type"/>
       </Properties>

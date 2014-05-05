@@ -27,8 +27,7 @@ public class JsonReader {
         unitsList = new ArrayList<String>();
         currencyList = new ArrayList<String>();
         try {
-            Object obj = parser.parse(new FileReader(filename));
-            JSONObject jsonObject = (JSONObject) obj;
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(filename));
  
             JSONArray jUnits = (JSONArray) jsonObject.get("units");
             Iterator<JSONObject> iterator = jUnits.iterator();
