@@ -7,6 +7,8 @@ import com.sun.syndication.io.XmlReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,17 +27,24 @@ public class ExchangeRates {
     static String BASEURL = "http://themoneyconverter.com/rss-feed/";
     private String FromCurrency;
     private String ToCurrency;
+    private Date rssDate;
+    private HashMap rateMap;
     
     public ExchangeRates() {
-        FromCurrency = "USD";
+        rateMap = new HashMap();
+        this.update("USD");
+    }
+    
+    public void update(String FromUnits) {
         SyndFeed feed = null;
+        FromCurrency = FromUnits;
         try {
             URL feedUrl = new URL(BASEURL+FromCurrency+"/rss.xml");
 
             SyndFeedInput input = new SyndFeedInput();
             feed = input.build(new XmlReader(feedUrl));
 
-            System.out.println(feed);
+            //System.out.println(feed);
 
         }
         catch (Exception ex) {
@@ -48,7 +57,12 @@ public class ExchangeRates {
                String title = entry.getTitle();
                String descr = entry.getDescription().getValue();
                
-               System.out.println("Title: "+title+"\nDescription: "+descr);
+               //System.out.println("Title: "+title+"\nDescription: "+descr);
+               double rate;
+               int st = descr.indexOf("=") + 1;
+               int en = descr.indexOf(".", st) + 6;
+               rate = Double.parseDouble(descr.substring(st, en).replace(",", ""));
+               rateMap.put(title, rate);
            }
         } else {
             System.out.println();
@@ -58,19 +72,16 @@ public class ExchangeRates {
         }
     }
     
-    public void update(String FromUnits) {
-        
-    }
-    
     public String getUnits() {
-        String temp = "";
-        
-        return temp;
+        return FromCurrency;
     }
     
     public double getRate(String ToUnits) {
-        double rate = 0;
-        
-        return rate;
+        String conversion = ToUnits+"/"+FromCurrency;
+        return (Double) rateMap.get(conversion);
+    }
+    
+    public void printHashMap() {
+        System.out.println(rateMap);
     }
 }
