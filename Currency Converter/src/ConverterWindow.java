@@ -340,7 +340,7 @@ public class ConverterWindow extends javax.swing.JFrame {
         convertedAmountNameLabel.setText(countriesList[toCurrencyList
                 .getSelectedIndex()]);
         
-        if (fromUnit.equals(exchangeRates.getUnits())) {
+        if (!fromUnit.equals(exchangeRates.getUnits())) {
             exchangeRates.update(fromUnit);
         }
         if (exchangeRate == null || exchangeRate != exchangeRates.getRate(toUnit)) {
