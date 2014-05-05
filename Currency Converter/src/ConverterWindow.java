@@ -6,6 +6,8 @@ import static java.util.Arrays.asList;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
@@ -26,6 +28,9 @@ public class ConverterWindow extends javax.swing.JFrame {
     private String[] countriesList;
     private Double amount;
     private Double toAmount;
+    private String fromUnit;
+    private String toUnit;
+    ExchangeRates exchangeRates;
     private Double exchangeRate;
     
     
@@ -34,22 +39,19 @@ public class ConverterWindow extends javax.swing.JFrame {
      */
     public ConverterWindow() {
         JsonReader jsonReader = new JsonReader("currencylist.json");
-        ExchangeRates exchangeRates = new ExchangeRates();
+        exchangeRates = new ExchangeRates();
         
         currenciesList = jsonReader.getUnits();
         countriesList = jsonReader.getCountries();
         
-        exchangeRates.update(DEF_FROM_CURRENCY);
-        exchangeRate = exchangeRates.getRate(DEF_TO_CURRENCY);
         initComponents();
-        
-        updateLabels();
         
         amountField.setValue(1.00);
         
         // Format the input field to numerical with 2 decimal places
         NumberFormat numFormat = NumberFormat.getNumberInstance();
         numFormat.setMinimumFractionDigits(2);
+        numFormat.setMaximumFractionDigits(2);
         NumberFormatter numFormatter = new NumberFormatter(numFormat);
         DefaultFormatterFactory numFactory = 
                 new DefaultFormatterFactory(numFormatter);
@@ -60,6 +62,23 @@ public class ConverterWindow extends javax.swing.JFrame {
                 .indexOf(DEF_FROM_CURRENCY));
         toCurrencyList.setSelectedIndex(asList(currenciesList)
                 .indexOf(DEF_TO_CURRENCY));
+        
+        amountField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateForm();
+              }
+            @Override
+              public void removeUpdate(DocumentEvent e) {
+                updateForm();
+              }
+            @Override
+              public void insertUpdate(DocumentEvent e) {
+                updateForm();
+              }
+        });
+        
+        updateForm();
     }
 
     /**
@@ -155,7 +174,6 @@ public class ConverterWindow extends javax.swing.JFrame {
 
         exchangeRateField.setEditable(false);
         exchangeRateField.setFocusTraversalKeysEnabled(false);
-        exchangeRateField.setFocusable(false);
 
         rateLabel.setText("Exchange Rate:");
 
@@ -181,15 +199,24 @@ public class ConverterWindow extends javax.swing.JFrame {
                 amountFieldFocusGained(evt);
             }
         });
+        amountField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                amountFieldKeyTyped(evt);
+            }
+        });
 
         convertedAmountField.setEditable(false);
         convertedAmountField.setFocusTraversalKeysEnabled(false);
-        convertedAmountField.setFocusable(false);
 
         fileMenu.setText("File");
 
         updateMenuItem.setText("Update");
         updateMenuItem.setToolTipText("");
+        updateMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(updateMenuItem);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
@@ -284,13 +311,13 @@ public class ConverterWindow extends javax.swing.JFrame {
 
     private void fromCurrencyListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fromCurrencyListActionPerformed
         // TODO add your handling code here:
-        updateLabels();
-        //setFromNumberFormat(currencies[fromCurrencyList.getSelectedIndex()]);
+        updateForm();
     }//GEN-LAST:event_fromCurrencyListActionPerformed
 
     private void toCurrencyListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toCurrencyListActionPerformed
         // TODO add your handling code here:
-        updateLabels();
+        
+        updateForm();
         //setToNumberFormat(currencies[toCurrencyList.getSelectedIndex()]);
     }//GEN-LAST:event_toCurrencyListActionPerformed
 
@@ -315,13 +342,34 @@ public class ConverterWindow extends javax.swing.JFrame {
         
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
-    private void updateLabels() {
+    private void updateMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateMenuItemActionPerformed
+        updateForm();
+    }//GEN-LAST:event_updateMenuItemActionPerformed
+
+    private void amountFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_amountFieldKeyTyped
+        updateForm();
+    }//GEN-LAST:event_amountFieldKeyTyped
+
+    private void updateForm() {
+        fromUnit = fromCurrencyList.getSelectedItem().toString();
+        toUnit = toCurrencyList.getSelectedItem().toString();
+        
         amountNameLabel.setText(countriesList[fromCurrencyList
                 .getSelectedIndex()]);
         convertedAmountNameLabel.setText(countriesList[toCurrencyList
                 .getSelectedIndex()]);
         
-        exchangeRateField.setText(exchangeRate.toString());
+        if (fromUnit.equals(exchangeRates.getUnits())) {
+            exchangeRates.update(fromUnit);
+        }
+        if (exchangeRate == null || exchangeRate != exchangeRates.getRate(toUnit)) {
+            exchangeRate = exchangeRates.getRate(toUnit);
+            exchangeRateField.setText(exchangeRate.toString());
+        }
+        amount = Double.parseDouble(amountField.getValue().toString());
+        
+        toAmount = amount * exchangeRate;
+        convertedAmountField.setValue(toAmount);
     }
     
     /**
@@ -353,6 +401,7 @@ public class ConverterWindow extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new ConverterWindow().setVisible(true);
             }

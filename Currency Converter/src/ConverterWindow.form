@@ -81,6 +81,9 @@
                 <Property name="text" type="java.lang.String" value="Update"/>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="exitMenuItem">
               <Properties>
@@ -242,7 +245,6 @@
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
         <Property name="focusTraversalKeysEnabled" type="boolean" value="false"/>
-        <Property name="focusable" type="boolean" value="false"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="rateLabel">
@@ -297,13 +299,13 @@
       </Properties>
       <Events>
         <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="amountFieldFocusGained"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="amountFieldKeyTyped"/>
       </Events>
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="convertedAmountField">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
         <Property name="focusTraversalKeysEnabled" type="boolean" value="false"/>
-        <Property name="focusable" type="boolean" value="false"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
