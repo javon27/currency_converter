@@ -95,7 +95,7 @@ public class ConverterWindow extends javax.swing.JFrame {
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("This app was designed for Dr. Jenness's\nJava Application Development class. \n\nCurrency Exchange Rates courtesy of\nhttp://themoneyconverter.com/");
+        jTextArea1.setText("This app was designed for Dr. Jenness's\nJava Application Development Spring 2014\nclass. \n\nCurrency Exchange Rates courtesy of\nhttp://themoneyconverter.com/");
         jScrollPane1.setViewportView(jTextArea1);
 
         jLabel3.setFont(new java.awt.Font("Lucida Blackletter", 0, 18)); // NOI18N
