@@ -6,6 +6,7 @@ import java.text.ParseException;
 import static java.util.Arrays.asList;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -347,7 +348,8 @@ public class ConverterWindow extends javax.swing.JFrame {
         if (exchangeRate == null || exchangeRate != exchangeRates.getRate(toUnit)) {
             exchangeRate = exchangeRates.getRate(toUnit);
             exchangeRateField.setText(exchangeRate.toString());
-        }
+            
+        }   
         amount = Double.parseDouble(amountField.getValue().toString());
         
         toAmount = amount * exchangeRate;

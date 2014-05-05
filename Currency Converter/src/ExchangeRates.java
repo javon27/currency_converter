@@ -5,6 +5,7 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 import java.io.IOException;
+import static java.lang.System.exit;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,10 +29,12 @@ public class ExchangeRates {
     static String BASEURL = "http://themoneyconverter.com/rss-feed/";
     private String FromCurrency;
     private String ToCurrency;
-    private Date rssDate;
     private HashMap rateMap;
     
     public ExchangeRates() {
+        FromCurrency = "NaN";
+        ToCurrency = "NaN";
+        
         rateMap = new HashMap();
         this.update("USD");
     }
@@ -50,6 +54,13 @@ public class ExchangeRates {
         catch (Exception ex) {
             ex.printStackTrace();
             System.out.println("ERROR: "+ex.getMessage());
+            //custom title, error icon
+            JOptionPane.showMessageDialog(null,
+                    "This app needs a valid connection to the internet.\n"
+                    + "This app will now close.",
+                    "Check Internet",
+                    JOptionPane.ERROR_MESSAGE);
+            exit(1);
         }
 
         if (feed != null) {
@@ -65,10 +76,7 @@ public class ExchangeRates {
                rateMap.put(title, rate);
            }
         } else {
-            System.out.println();
-            System.out.println("FeedReader reads and prints any RSS/Atom feed type.");
-            System.out.println("The first parameter must be the URL of the feed to read.");
-            System.out.println();
+            rateMap.put("NaN", new Double(-1));
         }
     }
     
@@ -78,7 +86,14 @@ public class ExchangeRates {
     
     public double getRate(String ToUnits) {
         String conversion = ToUnits+"/"+FromCurrency;
-        return (Double) rateMap.get(conversion);
+        double rate;
+        try {
+            rate = (Double) rateMap.get(conversion);
+        } catch (Exception e) {
+            rate = (Double) rateMap.get("NaN");
+        }
+        
+        return rate;
     }
     
     public void printHashMap() {
