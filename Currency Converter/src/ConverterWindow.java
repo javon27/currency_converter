@@ -2,12 +2,14 @@
 import static java.lang.System.exit;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import static java.util.Arrays.asList;
 import java.util.Locale;
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.DefaultFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
@@ -47,36 +49,7 @@ public class ConverterWindow extends javax.swing.JFrame {
         initComponents();
         
         amountField.setValue(1.00);
-        
-        // Format the input field to numerical with 2 decimal places
-        NumberFormat numFormat = NumberFormat.getNumberInstance();
-        numFormat.setMinimumFractionDigits(2);
-        numFormat.setMaximumFractionDigits(2);
-        NumberFormatter numFormatter = new NumberFormatter(numFormat);
-        DefaultFormatterFactory numFactory = 
-                new DefaultFormatterFactory(numFormatter);
-        amountField.setFormatterFactory(numFactory);
-        convertedAmountField.setFormatterFactory(numFactory);
-        
-        fromCurrencyList.setSelectedIndex(asList(currenciesList)
-                .indexOf(DEF_FROM_CURRENCY));
-        toCurrencyList.setSelectedIndex(asList(currenciesList)
-                .indexOf(DEF_TO_CURRENCY));
-        
-        amountField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                updateForm();
-              }
-            @Override
-              public void removeUpdate(DocumentEvent e) {
-                updateForm();
-              }
-            @Override
-              public void insertUpdate(DocumentEvent e) {
-                updateForm();
-              }
-        });
+        formatAmountField();
         
         updateForm();
     }
@@ -95,6 +68,7 @@ public class ConverterWindow extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         fromCurrencyList = new javax.swing.JComboBox();
         toCurrencyList = new javax.swing.JComboBox();
         exchangeRateField = new javax.swing.JTextField();
@@ -115,16 +89,26 @@ public class ConverterWindow extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         AboutDialog.setTitle("About");
+        AboutDialog.setMinimumSize(new java.awt.Dimension(395, 336));
+        AboutDialog.setResizable(false);
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Yada yada yada yada...");
+        jTextArea1.setText("This app was designed for Dr. Jenness's\nJava Application Development class. \n\nCurrency Exchange Rates courtesy of\nhttp://themoneyconverter.com/");
         jScrollPane1.setViewportView(jTextArea1);
 
         jLabel3.setFont(new java.awt.Font("Lucida Blackletter", 0, 18)); // NOI18N
         jLabel3.setText("About:");
 
         jLabel4.setText("Copyright 2014 Jayson Gallardo");
+
+        jButton1.setText("Close");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout AboutDialogLayout = new javax.swing.GroupLayout(AboutDialog.getContentPane());
         AboutDialog.getContentPane().setLayout(AboutDialogLayout);
@@ -133,11 +117,12 @@ public class ConverterWindow extends javax.swing.JFrame {
             .addGroup(AboutDialogLayout.createSequentialGroup()
                 .addGap(51, 51, 51)
                 .addGroup(AboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton1)
                     .addComponent(jLabel4)
                     .addGroup(AboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3)))
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         AboutDialogLayout.setVerticalGroup(
             AboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,9 +131,11 @@ public class ConverterWindow extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
                 .addComponent(jLabel4)
-                .addGap(39, 39, 39))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -197,11 +184,6 @@ public class ConverterWindow extends javax.swing.JFrame {
         amountField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 amountFieldFocusGained(evt);
-            }
-        });
-        amountField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                amountFieldKeyTyped(evt);
             }
         });
 
@@ -338,17 +320,16 @@ public class ConverterWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-        // TODO add your handling code here:
-        
+        AboutDialog.setVisible(true);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void updateMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateMenuItemActionPerformed
         updateForm();
     }//GEN-LAST:event_updateMenuItemActionPerformed
 
-    private void amountFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_amountFieldKeyTyped
-        updateForm();
-    }//GEN-LAST:event_amountFieldKeyTyped
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        AboutDialog.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void updateForm() {
         fromUnit = fromCurrencyList.getSelectedItem().toString();
@@ -370,6 +351,47 @@ public class ConverterWindow extends javax.swing.JFrame {
         
         toAmount = amount * exchangeRate;
         convertedAmountField.setValue(toAmount);
+    }
+    
+    void formatAmountField () {
+        // Format the input field to numerical with 2 decimal places
+        NumberFormat numFormat = NumberFormat.getNumberInstance();
+        numFormat.setMinimumFractionDigits(2);
+        numFormat.setMaximumFractionDigits(2);
+        NumberFormatter numFormatter = new NumberFormatter(numFormat);
+        DefaultFormatter df = new DefaultFormatter();
+        df.setCommitsOnValidEdit(true);
+        DefaultFormatterFactory numFactory = 
+                new DefaultFormatterFactory(numFormatter);
+        numFactory.setEditFormatter(df);
+        amountField.setFormatterFactory(numFactory);
+        convertedAmountField.setFormatterFactory(numFactory);
+        
+        fromCurrencyList.setSelectedIndex(asList(currenciesList)
+                .indexOf(DEF_FROM_CURRENCY));
+        toCurrencyList.setSelectedIndex(asList(currenciesList)
+                .indexOf(DEF_TO_CURRENCY));
+        
+        amountField.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateForm();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateForm();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (amountField.getValue() == null) {
+                    amountField.setValue(0.00);
+                }
+                updateForm();
+            }
+        });
     }
     
     /**
@@ -421,6 +443,7 @@ public class ConverterWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JComboBox fromCurrencyList;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
