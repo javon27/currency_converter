@@ -68,7 +68,7 @@ public class ExchangeRates {
                String title = entry.getTitle();
                String descr = entry.getDescription().getValue();
                
-               //System.out.println("Title: "+title+"\nDescription: "+descr);
+               System.out.println("Title: "+title+"\nDescription: "+descr);
                double rate;
                int st = descr.indexOf("=") + 1;
                int en = descr.indexOf(".", st) + 6;
